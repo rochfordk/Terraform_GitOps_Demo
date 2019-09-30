@@ -20,18 +20,18 @@ module "vpc"{
 
   cidr = "10.0.0.0/16"
 
-  azs             = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  azs             = ["eu-west-1a", "eu-west-1b"]
+  private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]
 
-  enable_ipv6 = true
+  //enable_ipv6 = true
 
   enable_nat_gateway = true
-  single_nat_gateway = true
+  //single_nat_gateway = true
 
-  public_subnet_tags = {
-    Name = "overridden-name-public"
-  }
+  //public_subnet_tags = {
+  //  Name = "overridden-name-public"
+  //}
 
   tags = {
     Owner       = "rochford"
@@ -107,12 +107,17 @@ module "security_group" {
 module "ec2" {
   source = "github.com/terraform-aws-modules/terraform-aws-ec2-instance"
 
-  instance_count = 1
+  instance_count = 2
 
-  name          = "example-normal"
+  name          = "gitops-demo-compute"
   ami           = data.aws_ami.amazon_linux.id
   instance_type = "t1.micro"
-  subnet_id     = tolist(data.aws_subnet_ids.all.ids)[0]
+  //subnet_id   = tolist(data.aws_subnet_ids.all.ids)[0][0][1]
+  //subnet_ids    = tolist(module.vpc.public_subnets.aws_subnet_ids)[0][1]
+  //subnet_ids    = module.vpc.public_subnets.aws_subnet_ids
+  subnet_ids             = ["${module.vpc.public_subnets[0]}", "${module.vpc.public_subnets[1]}"]
+  //subnet_ids    = tolist(module.vpc.aws_subnet.public.*.id)[0][1]
+  //subnet_ids             = ["subnet-eddcdzz4", "subnet-12345678"]
   //  private_ips                 = ["172.31.32.5", "172.31.46.20"]
   vpc_security_group_ids      = [module.security_group.this_security_group_id]
   associate_public_ip_address = true
