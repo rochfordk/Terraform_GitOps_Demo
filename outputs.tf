@@ -71,10 +71,10 @@ output "instance_id" {
 
 
 
-output "instance_public_dns" {
-  description = "Public DNS name assigned to the EC2 instance"
-  value       = module.ec2.public_dns[0]
-}
+//output "instance_public_dns" {
+//  description = "Public DNS name assigned to the EC2 instance"
+//  value       = module.ec2.public_dns[0]
+//}
 
 output "credit_specification" {
   description = "Credit specification of EC2 instance (empty list for not t2 instance types)"
