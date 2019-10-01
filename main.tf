@@ -74,12 +74,12 @@ module "security_group" {
 module "ec2" {
   source = "github.com/terraform-aws-modules/terraform-aws-ec2-instance"
 
-  instance_count = 2
+  instance_count = 1
 
   name          = "gitops-demo-compute"
   ami           = data.aws_ami.amazon_linux.id
   instance_type = "t1.micro"
-  subnet_ids             = ["${module.vpc.public_subnets[0]}", "${module.vpc.public_subnets[1]}"]
+  subnet_ids             = ["${module.vpc.public_subnets[0]}"]
   vpc_security_group_ids      = [module.security_group.this_security_group_id]
   associate_public_ip_address = true
   
