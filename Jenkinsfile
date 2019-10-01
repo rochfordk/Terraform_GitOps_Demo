@@ -25,6 +25,38 @@ try {
     }
   }
 
+  // Run terraform fmt
+  stage('fmt') {
+    node {
+      withCredentials([[
+        $class: 'AmazonWebServicesCredentialsBinding',
+        credentialsId: credentialsId,
+        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+      ]]) {
+        ansiColor('xterm') {
+          sh 'terraform fmt'
+        }
+      }
+    }
+  }
+
+  // Run terraform get
+  stage('get') {
+    node {
+      withCredentials([[
+        $class: 'AmazonWebServicesCredentialsBinding',
+        credentialsId: credentialsId,
+        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+      ]]) {
+        ansiColor('xterm') {
+          sh 'terraform get'
+        }
+      }
+    }
+  }
+
   // Run terraform plan
   stage('plan') {
     node {
